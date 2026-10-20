@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Gửi chị hai – 20/10</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cyan:#bcffff;
+    --cyan-glow:rgba(120,245,255,.55);
+    --pink:#ffb6c1;
+    --pink-glow:#ff69b4;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    background:#000;color:#fff;overflow:hidden;position:relative;
+    font-family:'Courier Prime',ui-monospace,Menlo,Consolas,monospace;
+    user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;
+    touch-action:manipulation;cursor:pointer;
+  }
+
+  /* ===== nền: màu theo cảnh ===== */
+  #tint{position:absolute;inset:0;z-index:1;pointer-events:none}
+  #tint i{position:absolute;inset:0;opacity:0;transition:opacity 1.6s ease-in-out}
+  #tint .t-pink  {background:radial-gradient(ellipse at 50% 55%,rgba(255,105,180,.34),rgba(120,20,70,.18) 45%,transparent 75%)}
+  #tint .t-night {background:radial-gradient(ellipse at 50% 100%,rgba(40,70,160,.35),rgba(10,10,40,.2) 50%,transparent 80%)}
+  #tint .t-health{background:radial-gradient(ellipse at 50% 55%,rgba(60,255,190,.22),rgba(0,90,90,.15) 45%,transparent 75%)}
+  #tint .t-beauty{background:radial-gradient(ellipse at 50% 50%,rgba(255,150,220,.28),rgba(130,60,170,.18) 50%,transparent 80%)}
+  #tint .t-warm  {background:radial-gradient(ellipse at 50% 55%,rgba(255,200,120,.3),rgba(160,70,50,.18) 50%,transparent 80%)}
+  #tint .t-green {background:radial-gradient(ellipse at 50% 85%,rgba(80,255,130,.28),rgba(0,70,35,.2) 55%,transparent 85%)}
+  #tint .t-blue  {background:radial-gradient(ellipse at 50% 40%,rgba(120,200,255,.34),rgba(20,50,150,.2) 50%,transparent 80%)}
+  #tint .t-final {background:radial-gradient(ellipse at 50% 50%,rgba(255,110,190,.34),rgba(255,190,110,.12) 50%,transparent 85%)}
+  body[data-s="3"]  #tint .t-pink,
+  body[data-s="4"]  #tint .t-night,
+  body[data-s="5"]  #tint .t-night,
+  body[data-s="6"]  #tint .t-health,
+  body[data-s="7"]  #tint .t-beauty,
+  body[data-s="8"]  #tint .t-warm,
+  body[data-s="9"]  #tint .t-green,
+  body[data-s="10"] #tint .t-green,
+  body[data-s="11"] #tint .t-green,
+  body[data-s="12"] #tint .t-blue,
+  body[data-s="13"] #tint .t-blue,
+  body[data-s="14"] #tint .t-final{opacity:1}
+
+  #rays{position:absolute;left:50%;top:42%;width:170vmax;height:170vmax;margin:-85vmax 0 0 -85vmax;z-index:1;pointer-events:none;opacity:0;transition:opacity 1.8s ease;
+    background:repeating-conic-gradient(from 0deg,rgba(150,215,255,.16) 0 6deg,transparent 6deg 18deg);
+    -webkit-mask-image:radial-gradient(circle,#000 0,transparent 45%);mask-image:radial-gradient(circle,#000 0,transparent 45%);
+    animation:spin 70s linear infinite}
+  body[data-s="12"] #rays,body[data-s="13"] #rays{opacity:1}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  #fx{position:absolute;inset:0;z-index:2;width:100%;height:100%;pointer-events:none}
+
+  /* ===== trang trí theo cảnh ===== */
+  .deco{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0;visibility:hidden;transition:opacity 1.1s ease,visibility 1.1s}
+  body[data-s="5"]  #d-crystal,
+  body[data-s="6"]  #d-health,
+  body[data-s="7"]  #d-beauty,
+  body[data-s="8"]  #d-smile,
+  body[data-s="9"]  #d-clover,
+  body[data-s="10"] #d-clover,
+  body[data-s="14"] #d-final{opacity:1;visibility:visible}
+
+  /* pha lê (nên là tớ muốn) */
+  #d-crystal svg{position:absolute;left:50%;top:60%;width:min(52vw,250px);transform:translate(-50%,-50%);overflow:visible;filter:drop-shadow(0 0 22px rgba(120,230,255,.7))}
+  .orb1{transform-origin:110px 110px;animation:spin 14s linear infinite}
+  .orb2{transform-origin:110px 110px;animation:spin 22s linear infinite reverse}
+  .gem{animation:gemPulse 3.2s ease-in-out infinite;transform-origin:110px 110px}
+  @keyframes gemPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+
+  /* sức khỏe */
+  #d-health .heart{position:absolute;left:50%;top:60%;width:min(38vw,170px);transform:translate(-50%,-50%);animation:beat 1.1s ease-in-out infinite;filter:drop-shadow(0 0 20px rgba(80,255,200,.65))}
+  #d-health .heart path{fill:rgba(80,255,200,.12);stroke:#9fffe3;stroke-width:3}
+  @keyframes beat{0%,100%{transform:translate(-50%,-50%) scale(1)}18%{transform:translate(-50%,-50%) scale(1.12)}34%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.07)}}
+  #d-health .ecg{position:absolute;left:0;width:100%;top:calc(60% - 52px);height:104px;opacity:.9;filter:drop-shadow(0 0 8px rgba(120,255,220,.9))}
+  #d-health .ecg path{fill:none;stroke:#c8fff0;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:560;stroke-dashoffset:560;animation:ecg 2.6s linear infinite}
+  @keyframes ecg{0%{stroke-dashoffset:560}60%{stroke-dashoffset:0}100%{stroke-dashoffset:-560}}
+
+  /* xinh đẹp */
+  #d-beauty .garland{position:absolute;left:0;right:0;top:0;height:120px;background:
+    radial-gradient(circle at 10% 0,rgba(255,185,218,.5),transparent 42%),
+    radial-gradient(circle at 90% 0,rgba(230,199,255,.5),transparent 42%);
+    -webkit-mask-image:linear-gradient(#000,transparent);mask-image:linear-gradient(#000,transparent)}
+  #d-beauty .ring{position:absolute;left:50%;top:46%;width:min(80vw,440px);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;
+    border:1px dashed rgba(255,200,235,.5);box-shadow:0 0 40px rgba(255,150,220,.25) inset,0 0 40px rgba(255,150,220,.25);animation:spin 40s linear infinite}
+  #d-beauty .ring.b{width:min(62vw,330px);animation-direction:reverse;animation-duration:28s;border-style:dotted}
+
+  /* nụ cười */
+  #d-smile .halo{position:absolute;left:50%;top:46%;width:min(80vw,460px);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;
+    background:radial-gradient(circle,rgba(255,220,150,.38),rgba(255,150,120,.14) 55%,transparent 72%);animation:haloPulse 4s ease-in-out infinite}
+  @keyframes haloPulse{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.1)}}
+  #d-smile .vinyl{position:absolute;right:6%;bottom:22%;width:min(26vw,120px);aspect-ratio:1;border-radius:50%;
+    background:radial-gradient(circle,#ff9ec4 0 14%,#1a1018 15% 17%,#2b1b26 18% 44%,#120a10 45% 47%,#2b1b26 48% 74%,#120a10 75%);
+    box-shadow:0 0 28px rgba(255,160,200,.55);animation:spin 5s linear infinite}
+
+  /* cỏ 4 lá */
+  #d-clover svg{position:absolute;left:0;bottom:31%;width:100%;height:52%;overflow:visible}
+  .cl{transform-origin:var(--ox) var(--oy);animation:sway var(--sd,4s) ease-in-out infinite alternate;animation-delay:var(--dl,0s)}
+  @keyframes sway{from{transform:rotate(-3.5deg)}to{transform:rotate(3.5deg)}}
+  .cl .leaf{fill:url(#gLeaf);stroke:rgba(210,255,200,.8);stroke-width:1.2;filter:drop-shadow(0 0 7px rgba(120,255,150,.75))}
+  .cl .stem{fill:none;stroke:#78e08a;stroke-width:3.2;stroke-linecap:round;filter:drop-shadow(0 0 5px rgba(120,255,150,.6))}
+  .cl{transition:opacity 1.2s}
+  .cl .pick{transform-origin:var(--ox) var(--oy);transition:transform 1.6s cubic-bezier(.2,.8,.2,1)}
+  .cl .hit{fill:transparent;pointer-events:none}
+  body[data-s="9"] .cl .hit{pointer-events:all;cursor:pointer}
+  body[data-s="9"] .cl .leaf{transition:filter .3s}
+  body[data-s="9"] .cl:hover .leaf{filter:drop-shadow(0 0 14px rgba(200,255,180,1))}
+  body[data-s="10"] .cl.picked .pick{transform:translate(var(--dx),0) scale(1.3)}
+  body[data-s="10"] .cl.picked .leaf{filter:drop-shadow(0 0 16px rgba(190,255,170,1))}
+  body[data-s="10"] .cl:not(.picked){opacity:0}
+
+  /* final */
+  #d-final .heart{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);font-size:min(30vw,170px);animation:beat 1.2s ease-in-out infinite;filter:drop-shadow(0 0 28px rgba(255,105,180,.9))}
+
+  /* ===== đôi mắt Tiny ===== */
+  #face{position:absolute;left:50%;top:46%;z-index:6;display:flex;gap:min(15vw,120px);transform:translate(-50%,-50%);transition:opacity 1.1s ease,top 1.2s cubic-bezier(.2,.8,.2,1);opacity:0;pointer-events:none}
+  body.eyes #face{opacity:1}
+  body[data-s="9"] #face,body[data-s="10"] #face{opacity:0}
+  body[data-s="5"] #face,body[data-s="6"] #face{top:35%}
+  .eye{position:relative;width:min(19vw,104px);height:min(25vw,140px)}
+  .eye .slide{position:absolute;inset:0;transform:translate(var(--ex,0px),var(--ey,0px))}
+  .eye .glow{position:absolute;inset:0;border-radius:42% 42% 46% 46% / 46% 46% 54% 54%;
+    background:rgba(188,255,255,.96);
+    box-shadow:0 0 26px 8px var(--cyan-glow),0 0 54px 16px rgba(0,255,255,.22),inset 0 0 12px rgba(255,255,255,.7);
+    transform:scaleY(var(--open,.05));transform-origin:50% 55%;transition:transform .16s ease-out,background .6s,box-shadow .6s}
+  body.awake .eye .glow{--open:1}
+  body.blink .eye .glow{--open:.07}
+  /* cảnh "có thể?" – nháy một mắt */
+  body[data-s="12"].wink .eye.r .glow{--open:.1;border-radius:50% 50% 50% 50%/70% 70% 30% 30%}
+  .blush{position:absolute;left:50%;top:calc(100% + 18px);transform:translateX(-50%);white-space:nowrap;color:#ff8fbd;letter-spacing:6px;font-weight:700;font-size:min(5vw,26px);text-shadow:0 0 12px #ff5fa8;opacity:0;transition:opacity .6s}
+  body.blushing .blush{opacity:.95}
+  /* mắt đổi theo cảnh */
+  body[data-s="3"] .glow,body[data-s="7"] .glow,body[data-s="14"] .glow{background:rgba(255,222,236,.97);box-shadow:0 0 26px 8px rgba(255,130,190,.55),0 0 54px 16px rgba(255,90,170,.25),inset 0 0 12px #fff}
+  body[data-s="6"] .glow{background:rgba(200,255,238,.97);box-shadow:0 0 26px 8px rgba(80,255,200,.55),0 0 54px 16px rgba(0,255,160,.22),inset 0 0 12px #fff}
+  body[data-s="8"] .glow{background:rgba(255,240,200,.97);box-shadow:0 0 26px 8px rgba(255,200,110,.55),0 0 54px 16px rgba(255,170,60,.22),inset 0 0 12px #fff}
+  body[data-s="12"] .glow,body[data-s="13"] .glow{background:rgba(215,240,255,.97);box-shadow:0 0 26px 8px rgba(120,190,255,.6),0 0 54px 16px rgba(60,120,255,.25),inset 0 0 12px #fff}
+
+  /* ===== chữ ===== */
+  .text-layer{
+    position:absolute;left:0;width:100%;padding:0 6vw;z-index:10;text-align:center;color:#fff;
+    letter-spacing:4px;font-size:clamp(1.5rem,5.2vw,3rem);line-height:1.4;
+    text-shadow:0 0 20px rgba(255,255,255,.9),0 0 40px rgba(0,255,255,.6);
+    opacity:0;transition:opacity .7s ease-in-out;pointer-events:none;text-wrap:balance;
+  }
+  .text-layer.show{opacity:1}
+  .text-layer.center{top:50%;transform:translateY(-50%);font-size:clamp(2rem,7vw,4rem)}
+  .text-layer.bottom{bottom:15%}
+  .text-layer.top{top:11%}
+  .text-layer.pink{color:var(--pink);text-shadow:0 0 15px var(--pink-glow)}
+  .text-layer.mint{color:#d6fff2;text-shadow:0 0 16px rgba(100,255,200,.9),0 0 34px rgba(0,200,150,.5)}
+  .text-layer.rose{color:#ffd8ef;text-shadow:0 0 16px rgba(255,140,215,.95),0 0 34px rgba(190,110,255,.5)}
+  .text-layer.gold{color:#fff0c4;text-shadow:0 0 16px rgba(255,200,100,.95),0 0 34px rgba(255,150,60,.5)}
+  .text-layer.green{color:#e1ffe0;text-shadow:0 0 16px rgba(110,255,140,.95),0 0 34px rgba(0,180,70,.5)}
+  .text-layer.blue{color:#dff8ff;text-shadow:0 0 18px rgba(180,245,255,.95),0 0 36px rgba(125,215,255,.55)}
+  #t14,.big-final{font-size:clamp(2rem,8vw,4.2rem)}
+  .clover-word{color:#9dff9d;text-shadow:0 0 16px #3dff5a,0 0 34px #00b83a}
+  .luck-word{color:#8dff9a;text-shadow:0 0 16px #3dff5a,0 0 40px #00c84a}
+  .q-word{color:#7fd4ff;text-shadow:0 0 18px #3fa9ff,0 0 44px #1f6cff}
+  .text-layer.sway.show{animation:lacLu 3s ease-in-out infinite}
+  @keyframes lacLu{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+  .small-line{display:block;margin-top:.5em;font-size:.45em;letter-spacing:3px;opacity:.85}
+
+  /* ===== lời bài hát (góc nhỏ bên trái) ===== */
+  #lyrics{position:absolute;z-index:12;left:max(14px,env(safe-area-inset-left));bottom:calc(16px + env(safe-area-inset-bottom));width:min(64vw,300px);height:64px;pointer-events:none;opacity:0;transition:opacity .9s ease}
+  body.lyr #lyrics{opacity:1}
+  .lyric-line{position:absolute;left:0;width:100%;display:flex;align-items:flex-end;justify-content:flex-start;text-align:left;
+    color:#ffe6ef;font-size:clamp(.72rem,2.6vw,.85rem);font-weight:700;line-height:1.3;letter-spacing:.02em;
+    text-shadow:0 0 8px rgba(255,197,220,.8),0 0 18px rgba(255,138,195,.35);
+    bottom:0;opacity:0;transform:translateY(8px);transition:opacity .5s ease-in-out,transform .55s cubic-bezier(.22,1,.36,1)}
+  .lyric-line::before{content:"♪ ";opacity:.8;margin-right:.35em;color:#ff9ec4}
+  .lyric-line.on{opacity:.95;transform:none}
+  .lyric-line.past{opacity:0;transform:translateY(-8px)}
+
+  /* ===== gợi ý, nút ===== */
+  #hint{position:absolute;z-index:20;left:0;right:0;bottom:calc(14% + env(safe-area-inset-bottom));text-align:center;font-size:.85rem;color:rgba(255,255,255,.55);letter-spacing:2px;opacity:0;transition:opacity .8s;pointer-events:none}
+  #hint.show{opacity:1;animation:pulse 2.2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:.35}50%{opacity:.95}}
+  #wait{position:absolute;z-index:21;left:0;right:0;top:calc(46% + min(24vw,150px));text-align:center;color:var(--cyan);text-shadow:0 0 12px rgba(120,245,255,.8);font-size:1.1rem;opacity:0;transition:opacity .3s;pointer-events:none}
+  #wait.show{opacity:1}
+  #nudge{position:absolute;z-index:21;left:0;right:0;top:calc(46% + min(24vw,150px));text-align:center;color:var(--cyan);text-shadow:0 0 12px rgba(120,245,255,.8);font-size:1.2rem;letter-spacing:3px;opacity:0;transition:opacity .6s;pointer-events:none}
+  #nudge.show{opacity:1;animation:pulse 1.6s ease-in-out infinite}
+  #mute{position:absolute;z-index:30;top:max(14px,env(safe-area-inset-top));right:14px;width:44px;height:44px;border-radius:50%;border:1.5px solid rgba(188,255,255,.45);background:rgba(0,0,0,.45);color:var(--cyan);font-size:18px;cursor:pointer;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
+  body.started #mute{display:flex}
+  #progress{position:absolute;z-index:30;left:0;bottom:0;height:3px;width:0;background:linear-gradient(90deg,#7ff,#f9c)}
+  #replay{position:absolute;z-index:25;left:50%;top:calc(44% + min(22vw,130px) + 4rem);transform:translateX(-50%);padding:.7rem 1.5rem;border-radius:99px;border:1.5px solid rgba(255,182,213,.7);
+    background:rgba(0,0,0,.4);color:#ffd9ea;font-family:inherit;font-size:1rem;letter-spacing:2px;cursor:pointer;opacity:0;visibility:hidden;transition:opacity 1s;text-shadow:0 0 10px #ff69b4;box-shadow:0 0 24px rgba(255,105,180,.35)}
+  body[data-s="14"].ended #replay{opacity:1;visibility:visible}
+  #sync{position:absolute;z-index:40;left:8px;top:8px;font-size:12px;color:#7f7;display:none}
+
+  @media (max-width:560px){
+    .text-layer{letter-spacing:2px}
+    .text-layer.top{top:9%}
+  }
+  @media (prefers-reduced-motion:reduce){
+    #rays,.orb1,.orb2{animation:none}
+  }
+</style>
+</head>
+<body data-s="0">
+
+<div id="tint"><i class="t-pink"></i><i class="t-night"></i><i class="t-health"></i><i class="t-beauty"></i><i class="t-warm"></i><i class="t-green"></i><i class="t-blue"></i><i class="t-final"></i></div>
+<div id="rays"></div>
+<canvas id="fx"></canvas>
+
+<!-- 5: pha lê -->
+<div class="deco" id="d-crystal" aria-hidden="true">
+  <svg viewBox="0 0 220 220">
+    <defs>
+      <radialGradient id="gGlass" cx="41%" cy="27%" r="77%"><stop offset="0" stop-color="#e0ffff" stop-opacity=".8"/><stop offset=".25" stop-color="#65d5ff" stop-opacity=".5"/><stop offset=".73" stop-color="#3261bf" stop-opacity=".48"/><stop offset="1" stop-color="#6b60cd" stop-opacity=".2"/></radialGradient>
+      <radialGradient id="gLight" cx="40%" cy="35%" r="68%"><stop offset="0" stop-color="#fff"/><stop offset=".3" stop-color="#efffff"/><stop offset=".7" stop-color="#9aecff"/><stop offset="1" stop-color="#78b4ff" stop-opacity=".15"/></radialGradient>
+    </defs>
+    <circle cx="110" cy="110" r="79" fill="none" stroke="rgba(200,245,255,.6)" stroke-width="1.4" stroke-dasharray="1 8" stroke-linecap="round"/>
+    <g class="orb1"><ellipse cx="110" cy="110" rx="94" ry="35" transform="rotate(-19 110 110)" fill="none" stroke="rgba(170,235,255,.65)" stroke-width="1.2"/><circle cx="194" cy="95" r="3.4" fill="#fff"/></g>
+    <g class="orb2"><ellipse cx="110" cy="110" rx="87" ry="42" transform="rotate(45 110 110)" fill="none" stroke="rgba(200,190,255,.6)" stroke-width="1.2"/><circle cx="43" cy="80" r="2.8" fill="#dff"/></g>
+    <g class="gem">
+      <path d="M110 49 L137 78 L163 110 L137 143 L110 171 L83 143 L57 110 L83 78 Z" fill="url(#gGlass)" stroke="rgba(220,250,255,.75)" stroke-width="1.5"/>
+      <path d="M110 70 Q122 100 150 110 Q122 120 110 150 Q98 120 70 110 Q98 100 110 70 Z" fill="url(#gLight)"/>
+      <path d="M92 76 L110 58 L126 76" stroke="rgba(255,255,255,.5)" stroke-width="2" stroke-linecap="round" fill="none"/>
+    </g>
+  </svg>
+</div>
+
+<!-- 6: sức khỏe -->
+<div class="deco" id="d-health" aria-hidden="true">
+  <svg class="heart" viewBox="0 0 100 100"><path d="M50 87 C38 76 12 57 12 35 C12 12 40 11 50 32 C60 11 88 12 88 35 C88 57 62 76 50 87 Z"/></svg>
+  <svg class="ecg" viewBox="0 0 560 105" preserveAspectRatio="none"><path d="M0 55 H110 L125 48 143 55 164 55 177 28 194 92 209 11 228 55 H270 L286 49 304 55 H380 L390 37 410 69 424 54 H560"/></svg>
+</div>
+
+<!-- 7: xinh đẹp -->
+<div class="deco" id="d-beauty" aria-hidden="true"><div class="garland"></div><div class="ring"></div><div class="ring b"></div></div>
+
+<!-- 8: nụ cười -->
+<div class="deco" id="d-smile" aria-hidden="true"><div class="halo"></div><div class="vinyl"></div></div>
+
+<!-- 9–10: cỏ 4 lá -->
+<div class="deco" id="d-clover" aria-hidden="true"><svg id="garden" viewBox="0 0 800 600" preserveAspectRatio="xMidYMax meet"></svg></div>
+
+<!-- 14: cuối -->
+<div class="deco" id="d-final" aria-hidden="true"></div>
+
+<!-- Tiny -->
+<div id="face" aria-hidden="true">
+  <div class="eye l"><div class="slide"><div class="glow"></div></div><div class="blush">////</div></div>
+  <div class="eye r"><div class="slide"><div class="glow"></div></div><div class="blush">////</div></div>
+</div>
+
+<div id="texts"></div>
+
+<div id="lyrics" aria-hidden="true"><div class="lyric-line"></div><div class="lyric-line"></div></div>
+
+<div id="wait">chị đợi chút xíu nha</div>
+<div id="nudge">chạm sang đi chị~</div>
+<div id="hint">chạm để tiếp tục</div>
+<button id="replay" type="button">xem lại ♥</button>
+<button id="mute" type="button" aria-label="Bật/tắt nhạc">♪</button>
+<div id="progress"></div>
+<div id="sync"></div>
+
+<audio id="audio" preload="auto" playsinline loop src="1792461601140_135254205947684518_2849156091447143116.mp4"></audio>
+
+<script>
+(() => {
+'use strict';
+
+/* =====================================================================
+   1. KỊCH BẢN – chữ trên từng cảnh (mỗi lần chạm = sang 1 cảnh)
+   ===================================================================== */
+const SCENES = [
+  { pos:'center', html:'chị hai ơi' },
+  { pos:'bottom', html:'em đây nè' },
+  { pos:'bottom', html:'hôm nay em có một nhiệm vụ nhỏ là nói với chị rằng...' },
+  { pos:'top',    cls:'pink',  html:'chị xinh lắm', sway:true },
+  { pos:'top',    cls:'pink',  html:'à thì đến<br>20/10 rồi' },
+  { pos:'top',    html:'nên là em muốn' },
+  { pos:'top',    cls:'mint',  html:'chúc chị thật nhiều sức khỏe' },
+  { pos:'top',    cls:'rose',  html:'chúc chị mãi xinh đẹp' },
+  { pos:'top',    cls:'gold',  html:'và luôn giữ<br>nụ cười trên môi' },
+  { pos:'top',    cls:'green', html:'em tặng chị ngọn <span class="clover-word">cỏ 4 lá</span> này' },
+  { pos:'top',    cls:'green', html:'nè, chị cầm lấy đi' },
+  { pos:'top',    cls:'green', html:'chúc chị gặp thật nhiều điều <span class="luck-word">may mắn</span>' },
+  { pos:'top',    cls:'blue',  html:'liệu chị <span class="q-word">có thể?</span>' },
+  { pos:'top',    cls:'blue',  html:'mãi mỉm cười như vậy<br>được không ạ?' },
+  { pos:'top',    cls:'pink big-final', html:'Happy 20/10<span class="small-line">em thương chị nhiều lắm ♥</span>' }
+];
+const LAST = SCENES.length - 1;
+
+/* =====================================================================
+   2. LỜI BÀI HÁT – chỉnh thời gian ở đây (giây, tính theo file mp3)
+      Mỗi phần: [giây bắt đầu, [các dòng]]. Các dòng trong 1 phần được
+      chia đều cho tới khi phần kế tiếp bắt đầu.
+      Mở trang với ?sync để xem đồng hồ nhạc và canh lại cho khớp.
+   ===================================================================== */
+const SECTIONS = [
+  [13.5, ["Lại chìm trong đôi mắt em xoe tròn ngất ngây", "Phút giây khi mà anh khẽ nhìn sang", "Lại làm đôi môi nhớ em, lại muốn hôn em thêm bao lần"]],
+  [19.8, ["Từng ngày cô đơn xé đôi, hạ thu đông khẽ trôi", "Cạnh bên em, anh sẽ thôi u sầu", "Lại làm cho anh càng thấy yêu em hơn ngày qua"]],
+  [25.2, ["Chẳng phải gió cuốn mưa bay đưa đôi tay đón anh về ngày lời yêu cất lên", "Chỉ cần thức giấc khi bên em nơi anh thấy yên bình", "Biển rộng sông sâu, anh trót thương chỉ riêng mình em thôi đấy", "Tình yêu ấy chẳng thể đổi thay", "Dù là bao lâu, cảm xúc trong anh mãi đong đầy"]],
+  [37.0, ["Vội lạc vào giấc mơ nhẹ nhàng tựa ý thơ", "Nụ cười người để anh nhớ, để anh mong đợi", "Sợ một ngày ngát xanh, cuộc đời này vắng em", "Anh phải làm sao bây giờ?"]],
+  [50.5, ["Em ơi em biết chăng, bao ngày bao tháng năm", "Chỉ cần một lần say đắm sẽ in hằn sâu trong tim anh", "Mãi như vậy, như lời hứa yêu em", "Yêu mình em một đời"]],
+  [62.9, ["Từ khi yêu em, thế gian vương đầy sắc hoa", "Tới nơi chân trời ta vẫn hằng mơ", "Đừng để cho tia nắng mai đặt chiếc hôn lên đôi vai gầy"]],
+  [75.5, ["Mặc kệ cơn dông bước ra điều gì phía trước ta", "Từng ngày bên nhau lướt qua êm đềm", "Lại làm cho anh càng muốn yêu em không rời xa"]],
+  [100.6, ["Vội lạc vào giấc mơ nhẹ nhàng tựa ý thơ", "Nụ cười người để anh nhớ, để anh mong đợi", "Sợ một ngày ngát xanh, cuộc đời này vắng em", "Anh phải làm sao bây giờ?"]],
+  [113.2, ["Em ơi em biết chăng, bao ngày bao tháng năm", "Chỉ cần một lần say đắm sẽ in hằn sâu trong tim anh", "Mãi như vậy, như lời hứa yêu em", "Yêu mình em một đời"]],
+  [125.8, ["Tình yêu đến ngọt ngào, yêu áng mây trên cao", "Tình yêu khẽ thì thầm, \"Anh thích em ra sao?\"", "Tình yêu muốn nồng nàn như sóng xô dạt dào khắp muôn nơi"]],
+  [138.5, ["Từng ngày cô đơn xé đôi, hạ thu đông khẽ trôi", "Cạnh bên em, anh sẽ thôi u sầu", "Lại làm cho anh càng thấy yêu em"]],
+  [151.6, ["Lại làm mình ngất ngây, nghẹn ngào từng phút giây", "Cả bầu trời ngày hôm ấy bỗng như thu lại", "Nhẹ nhàng rồi dắt tay, anh ngỏ lời muốn em sẽ là của anh sau này"]],
+  [161.0, ["Em à em biết chăng, dẫu là bao tháng năm", "Chỉ cần một lần say đắm sẽ in hằn sâu trong tim anh", "Mãi như vậy, như lời hứa yêu em", "Yêu mình em một đời"]],
+  [176.5, ["La-di-la, la-di-la, la-di-la-ta-ta", "La-di-la, la-di-la, la-di-la-ta-ta", "Lời yêu thương mà lâu nay từ con tim anh dành cho em sẽ không bao giờ đổi thay", "La-di-la, la-di-la, la-di-la-ta-ta", "La-di-la, la-di-la, la-di-la-ta-ta"]],
+  [203.0, ["Vì anh sẽ mãi như vậy, như lời hứa yêu em", "Yêu mình em một đời"]]
+];
+const SONG_END = 224;
+/* Dán kết quả từ sync.html vào đây (dạng const TAPPED = [...];) để lời khớp đúng từng câu. */
+const TAPPED = [14.03,17.04,20.29,26.59,29.62,32.77,38.94,45.41,50.87,54.69,57.86,63.49,66.66,69.69,72.93,75.9,79.26,83.32,86.05,89.35,92.29,95.52,101.86,104.93,108.02,113.77,116.8,120.06,122.86,126.47,129.27,133.45,136.42,139.63,142.54,145.84,152.07,155.17,158.53,163.91,166.97,170.12,176.46,179.58,183.73,186.53,189.87,196.09,197.15,202.55,205.39,208.43,211.62];
+/* LYRIC_OFFSET: số giây hiện lời SỚM hơn (tăng nếu lời còn chậm). Trong ?sync bấm [ hoặc ] để chỉnh ±0.5s. */
+let LYRIC_OFFSET = .4;
+const CUES = [];
+SECTIONS.forEach(([start, lines], i) => {
+  const end = i + 1 < SECTIONS.length ? SECTIONS[i + 1][0] : SONG_END;
+  const step = (end - start) / lines.length;
+  lines.forEach((text, k) => CUES.push({ t: start + k * step, text }));
+});
+
+const SHOW_LYRICS = false; // lời bài là lời tỏ tình -> ẩn khi tặng chị
+if (!SHOW_LYRICS) CUES.length = 0;
+if (TAPPED.length === CUES.length && CUES.length) CUES.forEach((c, i) => { c.t = TAPPED[i]; });
+
+/* =====================================================================
+   3. THAM CHIẾU DOM
+   ===================================================================== */
+const $ = s => document.querySelector(s);
+const body = document.body;
+const audio = $('#audio');
+const textsBox = $('#texts');
+const hint = $('#hint');
+const waitEl = $('#wait');
+const nudge = $('#nudge');
+const lyricLines = [...document.querySelectorAll('.lyric-line')];
+const eyeSlides = [...document.querySelectorAll('.eye .slide')];
+const fxCanvas = $('#fx');
+const fx = fxCanvas.getContext('2d');
+const SYNC = new URLSearchParams(location.search).has('sync');
+if (SYNC) $('#sync').style.display = 'block';
+
+const touchLite = matchMedia('(pointer:coarse)').matches || (navigator.hardwareConcurrency || 8) <= 4;
+
+/* sinh các lớp chữ */
+SCENES.forEach((sc, i) => {
+  const d = document.createElement('div');
+  d.className = `text-layer ${sc.pos} ${sc.cls || ''} ${sc.sway ? 'sway' : ''}`;
+  d.id = 't' + i;
+  d.innerHTML = sc.html;
+  textsBox.appendChild(d);
+});
+const textEls = [...textsBox.children];
+textEls[0].classList.add('show');
+
+/* =====================================================================
+   4. VƯỜN CỎ 4 LÁ (SVG)
+   ===================================================================== */
+(function buildGarden(){
+  const g = $('#garden');
+  const NS = 'http://www.w3.org/2000/svg';
+  g.innerHTML = `<defs><linearGradient id="gLeaf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d9ffc4"/><stop offset=".55" stop-color="#58e07a"/><stop offset="1" stop-color="#17a14a"/></linearGradient></defs>`;
+  const HEART = 'M0 0 C-6 -4 -26 -14 -22 -30 C-19 -42 -5 -42 0 -32 C5 -42 19 -42 22 -30 C26 -14 6 -4 0 0Z';
+  // [x gốc, chiều cao thân, tỉ lệ lá, độ cong, thời gian lắc, trễ]
+  const plants = [
+    [95, 250, .9, -50, 4.6, -1], [200, 170, .7, 38, 3.8, -2.2], [305, 300, 1.05, -44, 5.2, -.6],
+    [480, 190, .75, 42, 4.1, -3], [585, 285, 1.0, -40, 4.9, -1.7], [700, 220, .85, 46, 3.6, -2.6]
+  ];
+  const mk = (x, h, s, bend, sd, dl, id) => {
+    const top = { x: x + bend, y: 600 - h };
+    const grp = document.createElementNS(NS, 'g');
+    grp.setAttribute('class', 'cl');
+    if (id) grp.id = id;
+    grp.style.setProperty('--ox', x + 'px');
+    grp.style.setProperty('--oy', '600px');
+    grp.style.setProperty('--sd', sd + 's');
+    grp.style.setProperty('--dl', dl + 's');
+    let leaves = '';
+    for (let a = 0; a < 4; a++) leaves += `<path class="leaf" d="${HEART}" transform="rotate(${a * 90})"/>`;
+    grp.style.setProperty('--dx', (400 - x) + 'px');
+    grp.innerHTML = `<g class="pick"><path class="stem" d="M${x} 600 Q${x} ${600 - h * .55} ${top.x} ${top.y}"/>
+      <g transform="translate(${top.x} ${top.y}) scale(${s * 1.6})">${leaves}<circle r="2.8" fill="#eaffd6"/></g>
+      <circle class="hit" cx="${top.x}" cy="${top.y}" r="${56 * s}"/></g>`;
+    g.appendChild(grp);
+  };
+  plants.forEach(p => mk(...p));
+})();
+
+/* =====================================================================
+   5. HIỆU ỨNG HẠT (canvas)
+   ===================================================================== */
+let W = 0, H = 0, DPR = 1;
+function resize(){
+  DPR = Math.min(window.devicePixelRatio || 1, touchLite ? 1.5 : 2);
+  W = innerWidth; H = innerHeight;
+  fxCanvas.width = W * DPR; fxCanvas.height = H * DPR;
+  fx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  initStars();
+}
+
+let stars = [];
+function initStars(){
+  const n = Math.min(touchLite ? 90 : 170, Math.floor(W * H / 6500));
+  stars = Array.from({ length: n }, () => ({
+    x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.5 + .3,
+    a: Math.random(), da: (Math.random() * .02 + .004) * (Math.random() < .5 ? 1 : -1)
+  }));
+}
+
+const parts = [];
+const MAX_PARTS = touchLite ? 70 : 140;
+const R = (a, b) => a + Math.random() * (b - a);
+const pick = a => a[Math.floor(Math.random() * a.length)];
+
+/* mỗi cảnh: chu kỳ sinh hạt (ms) + hàm tạo hạt */
+const SPAWN = {
+  3:  { every: 260,  make: () => petal(['#ffb9da','#ffd4ed','#ff8fc0']) },
+  4:  { every: 2600, make: shooting },
+  5:  { every: 1800, make: shooting },
+  6:  { every: 380,  make: () => rise(['#9fffe3','#c8fff0','#6bffd0'], ['✦','+','✧'], 16) },
+  7:  { every: 240,  make: () => petal(['#ffb9da','#ffd4ed','#e6c7ff','#c8e4ff'], ['❀','✿','❁']) },
+  8:  { every: 340,  make: () => rise(['#ffcfe3','#ffe8bd','#edd5ff'], ['♥','♪','♫','♬'], 22) },
+  9:  { every: 300,  make: firefly },
+  10: { every: 260,  make: firefly },
+  11: { every: 170,  make: luckFall },
+  12: { every: 420,  make: () => rise(['#bfe6ff','#ffffff','#9ad0ff'], ['✦','✧'], 20) },
+  13: { every: 420,  make: () => rise(['#bfe6ff','#ffffff','#9ad0ff'], ['✦','✧'], 20) },
+  14: { every: 150,  make: () => Math.random() < .5 ? rise(['#ff8fbf','#ffd0e6','#ffe28a'], ['♥','✦','♡'], 24) : petal(['#ffb9da','#ffd4ed'], ['❀','✿']) }
+};
+function petal(colors, glyphs = ['❀','✿','❁']){
+  parts.push({ k:'g', g: pick(glyphs), c: pick(colors), x: R(0, W), y: -30, vx: R(-.3, .3), vy: R(.7, 1.6), sw: R(.5, 1.4), ph: R(0, 6.3),
+    s: R(13, 28), rot: R(0, 6.3), vr: R(-.03, .03), life: 0, max: 900, a: .85 });
+}
+function rise(colors, glyphs, size){
+  parts.push({ k:'g', g: pick(glyphs), c: pick(colors), x: R(0, W), y: H + 20, vx: R(-.25, .25), vy: R(-1.5, -.6), sw: R(.4, 1.2), ph: R(0, 6.3),
+    s: R(size * .6, size * 1.3), rot: 0, vr: 0, life: 0, max: 700, a: .9, glow: true });
+}
+function firefly(){
+  parts.push({ k:'o', c: pick(['#c8ffb0','#fff6a0','#9dffc0','#ffffff']), x: R(0, W), y: R(H * .35, H), vx: R(-.25, .25), vy: R(-.5, -.1),
+    sw: R(.3, .9), ph: R(0, 6.3), s: R(1.4, 3.4), life: 0, max: 520, a: 1 });
+}
+function luckFall(){
+  parts.push({ k:'g', g: pick(['✦','✧','♣','☘','✦']), c: pick(['#9dffb0','#d6ffd0','#6bff8e','#fff6a0']), x: R(0, W), y: -30, vx: R(-.2, .2), vy: R(1.2, 2.8),
+    sw: R(.3, 1), ph: R(0, 6.3), s: R(12, 26), rot: R(0, 6.3), vr: R(-.04, .04), life: 0, max: 600, a: .9, glow: true });
+}
+function shooting(){
+  const x = R(W * .2, W), y = R(0, H * .4);
+  parts.push({ k:'s', x, y, vx: R(-9, -6), vy: R(3, 5), life: 0, max: 60, a: 1 });
+}
+
+let scene = 0;
+let spawnAcc = 0, lastT = performance.now();
+function frame(now){
+  const dt = Math.min(64, now - lastT); lastT = now;
+  fx.clearRect(0, 0, W, H);
+
+  /* sao nền: hiện dần từ cảnh 4 */
+  const starAlpha = scene >= 4 ? 1 : 0;
+  starFade += (starAlpha - starFade) * Math.min(1, dt / 700);
+  if (starFade > .01) {
+    for (const s of stars) {
+      s.a += s.da;
+      if (s.a > 1 || s.a < .12) s.da *= -1;
+      fx.globalAlpha = Math.max(.1, Math.min(1, s.a)) * starFade;
+      fx.fillStyle = 'rgb(220,240,255)';
+      fx.beginPath(); fx.arc(s.x, s.y, s.r, 0, 6.2832); fx.fill();
+    }
+  }
+
+  /* sinh hạt */
+  const sp = SPAWN[scene];
+  if (sp && parts.length < MAX_PARTS) {
+    spawnAcc += dt;
+    const every = touchLite ? sp.every * 1.5 : sp.every;
+    while (spawnAcc >= every) { spawnAcc -= every; sp.make(); }
+  } else spawnAcc = 0;
+
+  /* cập nhật + vẽ hạt */
+  fx.textAlign = 'center'; fx.textBaseline = 'middle';
+  for (let i = parts.length - 1; i >= 0; i--) {
+    const p = parts[i];
+    p.life += dt / 16.7;
+    const f = p.life / p.max;
+    if (p.k === 's') {
+      p.x += p.vx * dt / 16.7; p.y += p.vy * dt / 16.7;
+      const al = 1 - p.life / p.max;
+      const g = fx.createLinearGradient(p.x, p.y, p.x - p.vx * 8, p.y - p.vy * 8);
+      g.addColorStop(0, `rgba(255,255,255,${al})`); g.addColorStop(1, 'rgba(255,255,255,0)');
+      fx.globalAlpha = 1; fx.strokeStyle = g; fx.lineWidth = 2;
+      fx.beginPath(); fx.moveTo(p.x, p.y); fx.lineTo(p.x - p.vx * 8, p.y - p.vy * 8); fx.stroke();
+      if (p.life > p.max) parts.splice(i, 1);
+      continue;
+    }
+    p.x += (p.vx + Math.sin(p.life * .03 * p.sw + p.ph) * p.sw * .6) * dt / 16.7;
+    p.y += p.vy * dt / 16.7;
+    p.rot += p.vr;
+    const fade = f < .1 ? f / .1 : f > .8 ? Math.max(0, (1 - f) / .2) : 1;
+    fx.globalAlpha = p.a * fade;
+    if (p.k === 'o') {
+      fx.fillStyle = p.c; fx.shadowColor = p.c; fx.shadowBlur = 10;
+      fx.beginPath(); fx.arc(p.x, p.y, p.s * (.7 + .3 * Math.sin(p.life * .08 + p.ph)), 0, 6.2832); fx.fill();
+      fx.shadowBlur = 0;
+    } else {
+      fx.save(); fx.translate(p.x, p.y); fx.rotate(p.rot);
+      fx.font = `${p.s}px sans-serif`; fx.fillStyle = p.c;
+      if (p.glow) { fx.shadowColor = p.c; fx.shadowBlur = 8; }
+      fx.fillText(p.g, 0, 0); fx.restore();
+    }
+    if (p.life > p.max || p.y > H + 60 || p.y < -60) parts.splice(i, 1);
+  }
+  fx.globalAlpha = 1;
+
+  eyesTick(now, dt);
+  requestAnimationFrame(frame);
+}
+let starFade = 0;
+
+/* =====================================================================
+   6. ĐÔI MẮT TINY – nhìn theo con trỏ, chớp mắt
+   ===================================================================== */
+let tx = 0, ty = 0, cx = 0, cy = 0, lastPointer = 0;
+function eyeRange(){ return Math.min(innerWidth * .06, 26); }
+addEventListener('pointermove', e => {
+  lastPointer = performance.now();
+  tx = (e.clientX / innerWidth - .5) * 2 * eyeRange();
+  ty = (e.clientY / innerHeight - .5) * 2 * eyeRange() * .7;
+}, { passive: true });
+
+function eyesTick(now, dt){
+  if (!body.classList.contains('eyes')) return;
+  // không có con trỏ: mắt tự nhìn quanh (rõ nhất ở cảnh 2)
+  if (now - lastPointer > 2500) {
+    const k = scene === 2 ? 1 : .35;
+    tx = Math.sin(now / 900) * eyeRange() * k;
+    ty = Math.cos(now / 1300) * eyeRange() * .4 * k;
+  }
+  const a = Math.min(1, dt / 120);
+  cx += (tx - cx) * a; cy += (ty - cy) * a;
+  eyeSlides.forEach(el => { el.style.setProperty('--ex', cx.toFixed(1) + 'px'); el.style.setProperty('--ey', cy.toFixed(1) + 'px'); });
+}
+
+let blinkTimer = 0;
+function scheduleBlink(){
+  clearTimeout(blinkTimer);
+  blinkTimer = setTimeout(() => {
+    if (body.classList.contains('awake')) {
+      body.classList.add('blink');
+      setTimeout(() => body.classList.remove('blink'), 150);
+      if (Math.random() < .25) setTimeout(() => { body.classList.add('blink'); setTimeout(() => body.classList.remove('blink'), 140); }, 280);
+    }
+    scheduleBlink();
+  }, R(1800, 4200));
+}
+let winkTimer = 0;
+function startWink(){
+  stopWink();
+  const loop = () => {
+    body.classList.add('wink');
+    winkTimer = setTimeout(() => { body.classList.remove('wink'); winkTimer = setTimeout(loop, 1900); }, 800);
+  };
+  winkTimer = setTimeout(loop, 900);
+}
+function stopWink(){ clearTimeout(winkTimer); body.classList.remove('wink'); }
+
+/* =====================================================================
+   7. NHẠC + CỔNG 9,7 GIÂY (giống bản mẫu: nghe một đoạn rồi chờ chị chạm)
+   ===================================================================== */
+const HOLD = 9.7, FADE_FROM = 8.35, VOL = .85;
+/* Đã bỏ cổng chờ: nhạc phát liền mạch từ lúc chạm đầu tiên tới hết bài. */
+let musicStarted = false, gateClosed = false, gateOpen = true, gateSkipped = false;
+audio.volume = VOL;
+
+function tryPlay(){
+  if (!gateOpen && gateClosed) return;
+  if (!audio.paused) return;
+  const p = audio.play();
+  if (p && p.catch) p.catch(() => {});
+}
+function startMusic(){
+  if (musicStarted) return;
+  musicStarted = true;
+  body.classList.add('started', 'lyr');
+  tryPlay();
+  // nếu nhạc không chạy được (bị chặn / lỗi tải) thì không chặn câu chuyện
+  setTimeout(() => { if (audio.paused || audio.error) gateSkipped = true; }, 3500);
+}
+audio.addEventListener('error', () => { gateSkipped = true; });
+
+function gateTick(){
+  if (gateOpen || gateSkipped) return;
+  const t = audio.currentTime || 0;
+  if (!gateClosed && t >= FADE_FROM && t < HOLD) audio.volume = Math.max(0, Math.min(1, VOL * (HOLD - t) / (HOLD - FADE_FROM)));
+  if (!gateClosed && t >= HOLD - .02) {
+    gateClosed = true;
+    audio.pause();
+    try { audio.currentTime = HOLD; } catch (_) {}
+    audio.volume = 0;
+    if (scene <= 2) scheduleNudge(2000);
+  }
+}
+function openGate(){
+  if (gateOpen) return;
+  gateOpen = true; gateClosed = false;
+  hideNudge();
+  audio.volume = 0;
+  const p = audio.play();
+  if (p && p.catch) p.catch(() => {});
+  const t0 = performance.now();
+  (function up(now){
+    const v = Math.min(1, (now - t0) / 850);
+    audio.volume = VOL * v;
+    if (v < 1) requestAnimationFrame(up);
+  })(t0);
+}
+function gateReady(){ return gateOpen || gateSkipped || (gateClosed && audio.currentTime >= HOLD - .045); }
+
+let nudgeTimer = 0;
+function scheduleNudge(ms){
+  clearTimeout(nudgeTimer);
+  nudgeTimer = setTimeout(() => {
+    if (scene > 2 || document.hidden) return;
+    body.classList.add('eyes', 'awake');
+    nudge.classList.add('show');
+  }, ms);
+}
+function hideNudge(){ clearTimeout(nudgeTimer); nudge.classList.remove('show'); }
+
+let waitTimer = 0;
+const WAIT_MSG = ['chị đợi chút xíu nha', 'chút nữa thôi ạ', 'xíu nữa thôi chị ơi', 'sắp được rồi ạ', 'một chút thôi nha'];
+function showWait(){
+  waitEl.textContent = pick(WAIT_MSG);
+  waitEl.classList.add('show');
+  clearTimeout(waitTimer);
+  waitTimer = setTimeout(() => waitEl.classList.remove('show'), 1700);
+}
+
+/* =====================================================================
+   8. LỜI BÀI HÁT ĐỒNG BỘ THEO NHẠC
+   ===================================================================== */
+let lyrIdx = -1, lyrSlot = -1;
+function cueAt(t){
+  let lo = 0, hi = CUES.length - 1, r = -1;
+  while (lo <= hi) { const m = (lo + hi) >> 1; if (CUES[m].t <= t + .03) { r = m; lo = m + 1; } else hi = m - 1; }
+  return r;
+}
+function syncLyrics(force){
+  if (!body.classList.contains('lyr')) return;
+  const t = audio.currentTime || 0;
+  const i = cueAt(t + LYRIC_OFFSET);
+  if (i === lyrIdx && !force) return;
+  lyrIdx = i;
+  if (i < 0) { lyricLines.forEach(l => l.classList.remove('on', 'past')); return; }
+  const next = lyrSlot < 0 ? 0 : 1 - lyrSlot;
+  const nl = lyricLines[next], ol = lyricLines[lyrSlot < 0 ? 1 : lyrSlot];
+  nl.textContent = CUES[i].text;
+  nl.classList.remove('past'); nl.classList.add('on');
+  ol.classList.remove('on'); if (lyrSlot >= 0) ol.classList.add('past');
+  lyrSlot = next;
+}
+
+/* =====================================================================
+   9. CHUYỂN CẢNH
+   ===================================================================== */
+let canClick = true;
+function setScene(i){
+  const prev = scene;
+  scene = i;
+  body.dataset.s = i;
+  textEls.forEach((el, k) => el.classList.toggle('show', k === i));
+
+  // mắt
+  if (i >= 1) body.classList.add('eyes');
+  body.classList.toggle('blushing', i === 3 || i === 7 || i === 8 || i === 14);
+  if (i === 12) startWink(); else stopWink();
+
+  // lời bài hát xuất hiện từ cảnh "chị xinh lắm"
+  if (i >= 3) syncLyrics(true);
+
+  hint.classList.remove('show');
+  clearTimeout(hintTimer);
+  hint.textContent = i === 9 ? 'chạm vào 1 cọng cỏ chị thích nha' : 'chạm để tiếp tục';
+  if (i < LAST) hintTimer = setTimeout(() => hint.classList.add('show'), i === 9 ? 1500 : 4200);
+  parts.length = 0; spawnAcc = 0;
+  // chuyển cảnh nhanh: dọn hạt cũ nhưng giữ cảm giác liên tục
+  if (i === 14) { burst(); setTimeout(() => { if (scene === LAST) body.classList.add('ended'); }, 3500); }
+}
+let hintTimer = 0;
+function burst(){
+  for (let k = 0; k < 34; k++) {
+    const a = R(0, 6.2832), v = R(1.5, 5);
+    parts.push({ k:'g', g: pick(['♥','✦','♡','❀']), c: pick(['#ff8fbf','#ffd0e6','#ffe28a','#fff']), x: W / 2, y: H * .44, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 1,
+      sw: 0, ph: 0, s: R(14, 30), rot: R(0, 6), vr: R(-.05, .05), life: 0, max: 130, a: 1, glow: true });
+  }
+}
+
+function pickClover(el){
+  document.querySelectorAll('.cl.picked').forEach(c => c.classList.remove('picked'));
+  if (el) el.classList.add('picked');
+}
+function advance(){
+  if (!canClick || scene >= LAST) return;
+  startMusic();
+  if (scene === 9 && !document.querySelector('.cl.picked')) pickClover(document.querySelectorAll('.cl')[2]);
+  if (scene === 2 && !gateReady()) { showWait(); return; }
+  if (scene === 2) openGate();
+  hideNudge();
+  canClick = false;
+
+  if (scene === 0) {
+    textEls[0].classList.remove('show');
+    scene = 0.5;
+    setTimeout(() => {
+      body.classList.add('eyes');
+      setTimeout(() => body.classList.add('awake'), 180);
+      scheduleBlink();
+      setScene(1);
+      canClick = true;
+      if (gateClosed) scheduleNudge(2000);
+    }, 700);
+    return;
+  }
+  setScene(scene + 1);
+  setTimeout(() => { canClick = true; }, scene >= 13 ? 900 : 650);
+  if (scene === LAST) setTimeout(() => { canClick = false; }, 0);
+}
+
+/* sự kiện */
+let lastTap = 0;
+document.addEventListener('pointerdown', e => {
+  if (e.target.closest('#mute, #replay')) return;
+  const now = performance.now();
+  if (now - lastTap < 250) return;
+  lastTap = now;
+  startMusic(); tryPlay();
+  if (scene === 9) {
+    const c = e.target.closest && e.target.closest('.cl');
+    if (!c) { hint.classList.add('show'); return; }
+    pickClover(c);
+  }
+  advance();
+}, { passive: true });
+document.addEventListener('keydown', e => {
+  if (SYNC && (e.key === '[' || e.key === ']')) { LYRIC_OFFSET += e.key === ']' ? .5 : -.5; syncLyrics(true); $('#sync').textContent = 'offset ' + LYRIC_OFFSET + 's'; return; }
+  if (['Space', 'Enter', 'ArrowRight', 'ArrowDown'].includes(e.code)) { e.preventDefault(); startMusic(); advance(); }
+});
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) { hideNudge(); if (musicStarted && !audio.paused) audio.pause(); }
+  else if (musicStarted && !muted && (gateOpen || !gateClosed)) tryPlay();
+});
+
+/* nút nhạc */
+let muted = false;
+$('#mute').addEventListener('click', e => {
+  e.stopPropagation();
+  muted = !muted;
+  audio.muted = muted;
+  $('#mute').textContent = muted ? '✕' : '♪';
+});
+
+/* hết bài */
+audio.addEventListener('ended', () => { body.classList.add('ended'); });
+$('#replay').addEventListener('click', e => {
+  e.stopPropagation();
+  body.classList.remove('ended', 'eyes', 'awake', 'lyr', 'blushing', 'started');
+  musicStarted = false; gateClosed = false; gateOpen = true; gateSkipped = false;
+  audio.pause(); audio.currentTime = 0; audio.volume = VOL;
+  lyrIdx = -1; lyrSlot = -1; lyricLines.forEach(l => { l.classList.remove('on', 'past'); l.textContent = ''; });
+  clearTimeout(blinkTimer); stopWink();
+  pickClover(null);
+  setScene(0);
+  textEls[0].classList.add('show');
+  canClick = true;
+});
+
+/* đồng hồ nhạc */
+audio.addEventListener('timeupdate', () => {
+  gateTick();
+  syncLyrics(false);
+  if (audio.duration) $('#progress').style.width = (audio.currentTime / audio.duration * 100) + '%';
+  // bài kết thúc mà chị chưa tới cảnh cuối thì vẫn để chị tự bấm tiếp
+  if (SYNC) $('#sync').textContent = audio.currentTime.toFixed(1) + 's | offset ' + LYRIC_OFFSET + 's  ( [ chậm hơn / ] sớm hơn )';
+  if (scene === LAST && audio.duration && audio.currentTime > audio.duration - 4) body.classList.add('ended');
+});
+
+addEventListener('resize', resize);
+resize();
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
